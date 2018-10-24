@@ -62,9 +62,11 @@ public class CadastroProduto {
 			System.out.println("Digite o nome do produto:");
 			nome = teclado.nextLine();
 		}while(!controller.isNomeValido(nome));
-		System.out.println("Digite o preço do produto: ");
 		double preco = 0;
+		do {
+		System.out.println("Digite o preço do produto: ");
 		preco = Double.parseDouble(teclado.nextLine());
+		}while(!controller.isNomePreco(preco));
 		
 		boolean resultado = controller.adicionarProduto(nome, preco);
 		if(resultado) {
@@ -80,7 +82,7 @@ public class CadastroProduto {
 		System.out.println("-------------------------------");
 		List<Produto> lista = controller.buscarTodos();
 		for(Produto produto : lista) {
-			System.out.printf("id: %d \n nome: %s \n preço: %d \n", produto.getId(), produto.getNome(), produto.getPreco());
+			System.out.printf("id: %d \nnome: %s \npreço: %.2f \n", produto.getId(), produto.getNome(), produto.getPreco());
 		}
 	}
 
@@ -92,7 +94,7 @@ public class CadastroProduto {
 		double maximo = Double.parseDouble(teclado.nextLine());
 		List<Produto> lista = controller.listarProdutoFaixaPreco(minimo, maximo);
 		for (Produto produto : lista) {
-			System.out.printf("%d - %s - %s - %s \n",produto.getId(),produto.getNome(),produto.getPreco());
+			System.out.printf("%d - %s - %.2f \n",produto.getId(),produto.getNome(),produto.getPreco());
 		}
 	}
 
@@ -102,21 +104,27 @@ public class CadastroProduto {
 		String nome = teclado.nextLine();
 		List<Produto> lista = controller.listarProdutoPorNome(nome);
 		for (Produto produto : lista) {
-			System.out.printf("%d - %s - %s - %s \n",produto.getId(),produto.getNome(),produto.getPreco());
+			System.out.printf("%d - %s - %.2f \n",produto.getId(),produto.getNome(),produto.getPreco());
 		}
 		
 	}
 
 	private void editarProduto(Scanner teclado) {
-		Produto produto = new Produto();
 		System.out.println("########### ATUALIZAR PRODUTO ##############");
 		controller.buscarTodos();
 		System.out.println("Digite o id do produto que deseja editar: ");
 		int id = Integer.parseInt(teclado.nextLine());
+		String nome;
+		do {
 		System.out.println("Digite o novo nome do produto: ");
-		String nome = teclado.nextLine();
+		nome = teclado.nextLine();
+		}while(!controller.isNomeValido(nome));
+		double preco;
+		do {
 		System.out.println("Digite o novo preco do produto: ");
-		double preco = Double.parseDouble(teclado.nextLine());
+		preco = Double.parseDouble(teclado.nextLine());
+		}while(!controller.isNomePreco(preco));
+		Produto produto = new Produto(id, nome, preco);
 		controller.atualizar(produto);
 	}
 

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class ProdutoDAO implements RepositorioProduto {
 		List<Produto> produtos = new ArrayList<>();
 		try {
 			Connection connection = Main.getConnection();
-			PreparedStatement comando = connection.prepareStatement("select * from contatos");
+			PreparedStatement comando = connection.prepareStatement("select * from produtos");
 			ResultSet cursor = comando.executeQuery();
 			while (cursor.next()) {
 				produtos.add(carregarProduto(cursor));
@@ -41,7 +42,7 @@ public class ProdutoDAO implements RepositorioProduto {
 		if(nome != null) {
 		try {
 			Connection connection = Main.getConnection();
-			PreparedStatement comando = connection.prepareStatement("select * from contatos where upper(nome) like upper(?)");
+			PreparedStatement comando = connection.prepareStatement("select * from produtos where upper(nome) like upper(?)");
 			comando.setString(1,"%"+ nome+ "%");
 			ResultSet cursor = comando.executeQuery();
 			while(cursor.next()) {
@@ -81,7 +82,7 @@ public class ProdutoDAO implements RepositorioProduto {
 		Produto produtos = null;
 		try {
 			Connection connection = Main.getConnection();
-			PreparedStatement comando = connection.prepareStatement("select * from contatos where id = ?");
+			PreparedStatement comando = connection.prepareStatement("select * from produtos where id = ?");
 			comando.setInt(1, id);
 			ResultSet cursor = comando.executeQuery();
 			if(cursor.next()) {
@@ -97,7 +98,7 @@ public class ProdutoDAO implements RepositorioProduto {
 	public void inserir(Produto produto) {
 		try {
 			Connection connection = Main.getConnection();
-			PreparedStatement comando = connection.prepareStatement("insert into produtos(nome, preco) values (?,?)");
+			PreparedStatement comando = connection.prepareStatement("insert into produtos(nome, preco) values (?,?)", Statement.RETURN_GENERATED_KEYS);
 			comando.setString(1, produto.getNome());
 			comando.setDouble(2, produto.getPreco());
 			comando.execute();
@@ -118,7 +119,7 @@ public class ProdutoDAO implements RepositorioProduto {
 		if(produto != null && produto.getId() != null) {
 			try {
 				Connection connection = Main.getConnection();
-				PreparedStatement comando = connection.prepareStatement("update pessoas set nome = ? where preco = ?");
+				PreparedStatement comando = connection.prepareStatement("update produtos set nome = ? where preco = ?");
 				comando.setString(1, produto.getNome());
 				comando.setDouble(2, produto.getPreco());
 				comando.execute();
@@ -134,7 +135,7 @@ public class ProdutoDAO implements RepositorioProduto {
 		if(id != null) {
 			try {
 				Connection conexao = Main.getConnection();
-				PreparedStatement comando = conexao.prepareStatement("delete from pessoas where id = ?");
+				PreparedStatement comando = conexao.prepareStatement("delete from produtos where id = ?");
 				comando.setInt(1, id);
 				comando.execute();
 				comando.close();
@@ -150,7 +151,7 @@ public class ProdutoDAO implements RepositorioProduto {
 		int quantidade = 0;
 		try {
 			Connection connection = Main.getConnection();
-			PreparedStatement comando = connection.prepareStatement("select count(*) as quantidade from contatos");
+			PreparedStatement comando = connection.prepareStatement("select count(*) as quantidade from produtos");
 			ResultSet cursor = comando.executeQuery();
 			if(cursor.next()) {
 				quantidade = cursor.getInt("quantidade");

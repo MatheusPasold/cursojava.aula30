@@ -42,6 +42,11 @@ public class ControllerProduto {
 	public void atualizar(Produto produto) {
 		produtoDAO.atualizar(produto);
 	}
+
+	public boolean isNomePreco(Double preco) {
+		boolean resultado = preco != null && preco < 0.01;
+		return resultado;
+	}
 	
 	
 }
